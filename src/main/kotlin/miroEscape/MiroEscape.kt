@@ -16,65 +16,54 @@ class MiroEscape {
      * maps[i]는 S: 시작, E: 출구, L: 레버, O: 통로, X: 벽으로 이루어져 있다.
      */
     private companion object {
-        private const val START = "S"
-        private const val EXIT = "E"
-        private const val LEVER = "L"
+        private const val START = 'S'
+        private const val EXIT = 'E'
+        private const val LEVER = 'L'
+        private const val BLOCK = 'X'
+        private val directions = listOf(-1 to 0, 1 to 0, 0 to -1, 0 to 1)
     }
 
-    data class Position(val x: Int, val y: Int, val route: String)
+    data class Position(val x: Int, val y: Int, val count:Int = 0, val isLever: Boolean = false)
+
+    private fun Boolean.toInt() = if (this) 1 else 0
 
     fun solution(maps: Array<String>): Int {
-        var answer: Int = 0
-
         // 현재 좌표에 시작이 있는 좌표 세팅 (X, Y, route)
         val start = maps.asSequence().mapIndexedNotNull { index, value ->
-            value.indexOf(START).takeIf { it >= 0 }?.let { Position(index, it, "") }
-        }.firstOrNull()
+            value.indexOf(START).takeIf { it >= 0 }?.let { Position(index, it) }
+        }.firstOrNull() ?: return -1
 
-        var routes: MutableList<Position> = mutableListOf(start!!)
+        val routes: MutableList<Position> = mutableListOf(start)
+        // 레버 상태에 따라 방문한 좌표 체크 (레버 방문 후에는 기존 좌표를 다시 방문할 수 있음)
+        val visits: List<List<BooleanArray>> = List(maps.size) { List(maps[it].length) { BooleanArray(2) } }
 
-        while (answer == 0) {
-            val newRoutes = mutableListOf<Position>()
+        while (routes.isNotEmpty()) {
+            val position = routes.removeFirst()
 
-            routes.forEach {
-                val leverIndex= it.route.indexOf(LEVER)
-                val exitIndex = it.route.indexOf(EXIT)
+            // 레버를 올리고 출구에 도착한 경우
+            if (position.isLever && maps[position.x][position.y] == EXIT) return position.count
 
-                // 레버를 올리고 출구에 도착한 경우
-                if (leverIndex in 1 until exitIndex) answer = it.route.length
+            // 현재 위치에서 네 방향으로 갈 수 있는 루트 추가
+            directions.forEach { direction ->
+                val x = position.x + direction.first
+                val y = position.y + direction.second
 
-                // 위로 갈 수 있는 루트 추가
-                if (it.x - 1 >= 0 && maps[it.x - 1][it.y] != 'X') {
-                    newRoutes.add(Position(it.x - 1, it.y, it.route + maps[it.x - 1][it.y]))
-                }
-
-                // 아래로 갈 수 있는 루트 추가
-                if (it.x + 1 < maps.size && maps[it.x + 1][it.y] != 'X') {
-                    newRoutes.add(Position(it.x + 1, it.y, it.route + maps[it.x + 1][it.y]))
-                }
-
-                // 왼쪽으로 갈 수 있는 루트 추가
-                if (it.y - 1 >= 0 && maps[it.x][it.y - 1] != 'X') {
-                    newRoutes.add(Position(it.x, it.y - 1, it.route + maps[it.x][it.y - 1]))
-                }
-
-                // 오른쪽으로 갈 수 있는 루트 추가
-                if (it.y + 1 < maps[it.x].length && maps[it.x][it.y + 1] != 'X') {
-                    newRoutes.add(Position(it.x, it.y + 1, it.route + maps[it.x][it.y + 1]))
+                // 범위 내에 있고, 벽이 아니며, 방문하지 않은 경우
+                if (x in maps.indices && y in maps[x].indices && maps[x][y] != BLOCK && !visits[x][y][position.isLever.toInt()]) {
+                    visits[x][y][position.isLever.toInt()] = true
+                    routes.add(Position(x, y, position.count + 1, (position.isLever || maps[x][y] == LEVER)))
                 }
             }
-
-            if (newRoutes.isEmpty()) answer = -1 else routes = newRoutes
         }
 
-        return answer
+        return -1
     }
 }
 
 fun main() {
     val miroEscape = MiroEscape()
 
-    val result = miroEscape.solution(arrayOf("SOOOOXOO","XOOOOOOO","OXOOOOOO","EOOOOOOO","OOOOOOOL"))
+    val result = miroEscape.solution(arrayOf("SOOOL","XXXXO","OOOOO","OXXXX","OOOOE"))
 
     println("result: $result")
 }
