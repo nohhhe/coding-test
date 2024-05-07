@@ -12,6 +12,7 @@ class FindLargeNumber {
      * 제한사항
      * 4 ≤ numbers의 길이 ≤ 1,000,000
      * 1 ≤ numbers[i] ≤ 1,000,000
+     *
      */
 
     fun solution(numbers: IntArray): IntArray {
