@@ -26,8 +26,8 @@ class Archery {
         private const val MAX_SCORE = 10
     }
 
-    private var answer = intArrayOf()
-    private var maxDiff = 0
+    private var answer:IntArray = intArrayOf()
+    private var maxDiff:Int = 0
 
     fun solution(n: Int, info: IntArray): IntArray {
         calculateScores(n, info, IntArray(MAX_SCORE + 1), 0)
@@ -38,8 +38,8 @@ class Archery {
     private fun calculateScores(remainCount: Int, apeachInfo: IntArray, ryanInfo: IntArray, index: Int) {
         // 마지막 index까지 온 경우 결과 계산
         if (index == MAX_SCORE + 1) {
-            var apeachScore = 0
-            var ryanScore = 0
+            var apeachScore:Int = 0
+            var ryanScore:Int = 0
 
             // 남은 화살이 있는 경우
             if (remainCount > 0) ryanInfo[MAX_SCORE] = remainCount
@@ -56,7 +56,7 @@ class Archery {
                 }
             }
 
-            val diff = ryanScore - apeachScore
+            val diff:Int = ryanScore - apeachScore
 
             /* 라이언이 우승할 수 있는 경우
              * 1.어피치보다 점수가 높은 경우
