@@ -47,8 +47,11 @@ class Archery {
             // 점수 계산
             apeachInfo.forEachIndexed { index, arrowCount ->
                 when {
+                    // 어피치와 라이언 모두 해당 점수에 화살을 맞히지 않은 경우
                     arrowCount == 0 && ryanInfo[index] == 0 -> return@forEachIndexed
+                    // 어피치가 라이언보다 많이 맞히거나 똑같이 맞힌 경우
                     arrowCount >= ryanInfo[index] -> apeachScore += MAX_SCORE - index
+                    // 라이언이 어피치보다 많이 맞힌 경우
                     arrowCount < ryanInfo[index] -> ryanScore += MAX_SCORE - index
                 }
             }
