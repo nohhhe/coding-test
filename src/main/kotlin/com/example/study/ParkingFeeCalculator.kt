@@ -71,7 +71,7 @@ class ParkingFeeCalculator {
                 }
                 // 출차인 경우 주차 시간 합산
                 else {
-                    parkingFeeInfo.parkingTime += parkingFeeInfo.inTime.BetweenMinutes(inOutInfo.time)
+                    parkingFeeInfo.parkingTime += parkingFeeInfo.inTime.betweenMinutes(inOutInfo.time)
                 }
             } ?: parkingFeeInfos.add(
                 ParkingFeeInfo(inOutInfo.carNumber, inOutInfo.time)
@@ -83,7 +83,7 @@ class ParkingFeeCalculator {
             // 출차 내역 없는 차량 요금 계산
             if (parkingFeeInfo.isIn) {
                 // 주차 시간 계산
-                parkingFeeInfo.parkingTime += parkingFeeInfo.inTime.BetweenMinutes(LocalTime.parse(LAST_OUT_TIME, TIME_FORMAT))
+                parkingFeeInfo.parkingTime += parkingFeeInfo.inTime.betweenMinutes(LocalTime.parse(LAST_OUT_TIME, TIME_FORMAT))
             }
 
             // 주차 요금 계산
@@ -106,7 +106,7 @@ class ParkingFeeCalculator {
     }
 
     // 시간 차이 계산(분단위)
-    private fun LocalTime.BetweenMinutes(endTime: LocalTime): Int {
+    private fun LocalTime.betweenMinutes(endTime: LocalTime): Int {
         return Duration.between(this, endTime).toMinutes().toInt()
     }
 }
