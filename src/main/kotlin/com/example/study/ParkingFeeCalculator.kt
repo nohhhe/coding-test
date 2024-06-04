@@ -74,10 +74,7 @@ class ParkingFeeCalculator {
                     parkingFeeInfo.parkingTime += parkingFeeInfo.inTime.BetweenMinutes(inOutInfo.time)
                 }
             } ?: parkingFeeInfos.add(
-                ParkingFeeInfo(
-                    inOutInfo.carNumber,
-                    inOutInfo.time
-                )
+                ParkingFeeInfo(inOutInfo.carNumber, inOutInfo.time)
             )
         }
 
