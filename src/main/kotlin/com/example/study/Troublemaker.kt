@@ -44,10 +44,8 @@ class Troublemaker {
             return bannedCombinations
         }
 
-        // 불량 사용자 아이디 패턴에 매칭되는 응모자 아이디 찾기
-        userIds.filter {
-            bannedIdPatterns[index].matches(it)
-        }.forEach { matchedUserId ->
+        // 불량 사용자 아이디 패턴에 매칭되는 응모자 아이디 찾은 리스트로 조합 찾기
+        userIds.filter { bannedIdPatterns[index].matches(it) }.forEach { matchedUserId ->
             // 매칭된 응모자 아이디 제외
             val nextUserIds = userIds.filter { it != matchedUserId }
             // 다음 조합 찾기
