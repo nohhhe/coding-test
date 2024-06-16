@@ -34,13 +34,13 @@ class Troublemaker {
         index: Int,
         userIds: List<String>,
         bannedIdPatterns: List<Regex>,
-        currentCombination: List<String>
+        previousCombination: List<String>
     ): MutableSet<List<String>> {
         val bannedCombinations: MutableSet<List<String>> = mutableSetOf()
 
         // 불량 사용자 아이디 패턴을 마지막 인덱스까지 찾은 경우 조합을 정렬하여 반환(중복 제거를 위해 정렬)
         if (index == bannedIdPatterns.size) {
-            bannedCombinations.add(currentCombination.sorted())
+            bannedCombinations.add(previousCombination.sorted())
             return bannedCombinations
         }
 
@@ -48,12 +48,12 @@ class Troublemaker {
         userIds.filter { bannedIdPatterns[index].matches(it) }.forEach { matchedUserId ->
             // 매칭된 응모자 아이디 제외
             val nextUserIds = userIds.filter { it != matchedUserId }
-            // 다음 조합 찾기
-            val nextCombination = currentCombination + matchedUserId
+            // 현재까지의 조합을 생성(이전 조합 + 매칭된 응모자 아이디)
+            val currentCombination = previousCombination + matchedUserId
 
             // 재귀를 통해 찾은 불량 사용자 아이디 조합 추가
             bannedCombinations.addAll(
-                findBannedIdCombinations(index + 1, nextUserIds, bannedIdPatterns, nextCombination)
+                findBannedIdCombinations(index + 1, nextUserIds, bannedIdPatterns, previousCombination)
             )
         }
 
