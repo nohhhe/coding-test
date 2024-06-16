@@ -38,7 +38,7 @@ class Troublemaker {
     ): MutableSet<List<String>> {
         val bannedCombinations: MutableSet<List<String>> = mutableSetOf()
 
-        // 불량 사용자 아이디 패턴을 마지막 인덱스까지 찾은 경우 조합 반환
+        // 불량 사용자 아이디 패턴을 마지막 인덱스까지 찾은 경우 조합을 정렬하여 반환(중복 제거를 위해 정렬)
         if (index == bannedIdPatterns.size) {
             bannedCombinations.add(currentCombination.sorted())
             return bannedCombinations
