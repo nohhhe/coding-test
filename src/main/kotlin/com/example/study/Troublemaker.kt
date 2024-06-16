@@ -24,6 +24,7 @@ class Troublemaker {
      */
 
     fun solution(user_ids: Array<String>, banned_ids: Array<String>): Int {
+        // 불량 사용자 아이디 패턴 생성
         val bannedIdPatterns = banned_ids.map { it.replace("*", ".").toRegex() }
 
         return findBannedIdCombinations(0, user_ids.toList(), bannedIdPatterns, emptyList()).size
