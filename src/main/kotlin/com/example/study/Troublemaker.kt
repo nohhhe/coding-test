@@ -53,7 +53,7 @@ class Troublemaker {
 
             // 재귀를 통해 찾은 불량 사용자 아이디 조합 추가
             bannedCombinations.addAll(
-                findBannedIdCombinations(index + 1, nextUserIds, bannedIdPatterns, previousCombination)
+                findBannedIdCombinations(index + 1, nextUserIds, bannedIdPatterns, currentCombination)
             )
         }
 
