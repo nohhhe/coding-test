@@ -39,16 +39,18 @@ class PrivacyCollectionPeriod {
         val todayDate = CustomDate(today)
 
         // 약관 정보를 데이터 클래스로 변환
-        val termsList: List<TermsInfo> = termsArray.map { terms ->
-            val term: List<String> = terms.split(" ")
-            TermsInfo(term[0], term[1].toInt())
+        val termsList = termsArray.map { terms ->
+            terms.split(" ").let { term ->
+                TermsInfo(term[0], term[1].toInt())
+            }
         }
 
         privacies.forEachIndexed { index, privacy ->
             // 개인정보 수집 유효기간 정보를 데이터 클래스로 변환
-            val privacyData: List<String> = privacy.split(" ")
-            val privacyInfo = PrivacyInfo(privacyData[1], privacyData[0])
-            // 항상 termsArray에 약관이 존재하기 때문에 first 사용
+            val privacyInfo = privacy.split(" ").let { privacyData ->
+                PrivacyInfo(privacyData[1], privacyData[0])
+            }
+            // 약관에 해당하는 유효기간을 찾아서 기간을 가져옴(항상 termsArray에 약관이 존재하기 때문에 first 사용)
             val privacyPeriod:Int = termsList.first { it.terms == privacyInfo.terms }.period
             // 만료 일자 계산
             val expirationDate = CustomDate(privacyInfo.date).addMonth(privacyPeriod)
