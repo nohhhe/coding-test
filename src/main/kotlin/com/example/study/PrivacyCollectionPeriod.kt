@@ -7,6 +7,7 @@ class PrivacyCollectionPeriod {
 
     data class TermsInfo(val terms: String, val period: Int)
     data class PrivacyInfo(val terms: String, var date: String)
+
     class CustomDate(dateString: String) {
         private val date: List<String> = dateString.split(".")
         private val year: Int = date[0].toInt()
