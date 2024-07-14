@@ -40,21 +40,13 @@ class HotelRoomRental {
             if (index == 0) {
                 confirmedBookTimeList.add(mutableListOf(bookTime))
             } else {
-                var isBooked = false
-
-                run loop@{
-                    confirmedBookTimeList.forEach { confirmedBookTime ->
-                        // 마지막 예약의 퇴실 시간 + 청소 시간이 다음 예약의 입실 시간보다 이전이면 예약 가능
-                        if (confirmedBookTime.last().endTime.plus(CLEANING_TIME).isBefore(bookTime.startTime)) {
-                            confirmedBookTime.add(bookTime)
-                            isBooked = true
-                            return@loop
-                        }
-                    }
-                }
-
-                // 이전 객실 예약에 포함되지 않은 경우 새 객실 예약으로 추가
-                if (!isBooked) {
+                confirmedBookTimeList.firstOrNull { confirmedBookTime ->
+                    // 마지막 예약의 퇴실 시간 + 청소 시간이 다음 예약의 입실 시간보다 이전이면 예약 가능
+                    confirmedBookTime.last().endTime.plus(CLEANING_TIME).isBefore(bookTime.startTime)
+                }?.also {
+                    it.add(bookTime)
+                } ?: run {
+                    // 이전 객실 예약에 추가할 수 없는 경우 새 객실 예약으로 추가
                     confirmedBookTimeList.add(mutableListOf(bookTime))
                 }
             }
